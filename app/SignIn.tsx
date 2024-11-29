@@ -8,14 +8,13 @@ const SignIn = () => {
   const router = useRouter();
 
   return (
-    <ScreenWrapper>
-      <Text>index</Text>
+    <ScreenWrapper bg='white'>
+      <Text>This is SignIn Page</Text>
 
-      <Button title="welcome" onPress={() => router.push("/_sitemap")}/>
+      <Button title="signin" onPress={() => router.push("/_sitemap")}/>
     </ScreenWrapper>
   )
 }
 
 export default SignIn
 
-const styles = StyleSheet.create({})
