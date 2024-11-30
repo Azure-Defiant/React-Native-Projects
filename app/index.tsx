@@ -21,12 +21,10 @@ const index = () => {
        <StatusBar style="dark"/>
         <View style={styles.container}>
            {/* Welcome Image */}
-           <Image style={styles.welcomeImage} resizeMode="cover" source={require('../assets/images/MojoGram Logo.png')} />  
-           <Image style={styles.imageSocialContainer} resizeMode="contain" source={require('../assets/images/imageSocial.png')} />  
+           <Image style={styles.welcomeImage} resizeMode="cover" source={require('../assets/images/mojoGram.png')} />  
+           {/* <Image style={styles.imageSocialContainer} resizeMode="contain" source={require('../assets/images/imageSocial.png')} />   */}
 
-          <View style={styles.textContainer}>
-            <Text style={styles.punchLine}>Unleash your vibe and capture {"\n"} your moments.</Text>
-          </View>
+          
 
           <View style={styles.buttonContainer}>
             <CustomButton 
@@ -42,7 +40,7 @@ const index = () => {
             <View style={styles.loginTextContainer}>
               <Text style={styles.alreadyAccountText}>Already have an account? </Text>
               <TouchableOpacity onPress={() => router.push('/SignIn')}>
-                <Text style={styles.loginText}>SignIn</Text>
+                <Text style={styles.signinText}>SignIn</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -99,10 +97,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#666'
     },
-    loginText: {
+    signinText: {
         fontFamily: 'Poppins-Bold',
         fontSize: 14,
         color: '#3A3B3C',
-        textDecorationLine: 'underline'
     }
 })
