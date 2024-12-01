@@ -6,10 +6,10 @@ import {
   ViewStyle, 
   TextStyle, 
   Animated,
-  View
+
 } from 'react-native';
 import { useFonts } from 'expo-font';
-import LoadingOverlay from '@/components/Loading'; // Import the new component
+import LoadingOverlay from '../components/Loading'; // Import the new component
 
 interface CustomButtonProps {
   title: string;

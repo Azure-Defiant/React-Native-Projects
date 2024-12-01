@@ -1,31 +1,36 @@
-import ScreenWrapper from "../components/ScreenWrapper"
+import ScreenWrapper from "@/components/ScreenWrapper"
 import { StyleSheet , Text , View, Image, TouchableOpacity} from "react-native"
-import React from "react"
+import React, { useEffect } from 'react';
 import { useRouter } from 'expo-router'
 import { useFonts } from 'expo-font';
 import { StatusBar } from "expo-status-bar"
-import { wp } from '../helpers/common'
-import { hp } from '../helpers/common'
+import { wp } from '@/helpers/common'
+import { hp } from '@/helpers/common'
 import CustomButton from "@/components/Button";
 
 const index = () => {
+
+    const [renderKey, setRenderKey] = React.useState(0);
+
      const router = useRouter()
 
     const [loaded] = useFonts({
-        'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
-        'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
-    })
+        'Poppins-Regular': require('@/assets/fonts/Poppins-Regular.ttf'),
+        'Poppins-Bold': require('@/assets/fonts/Poppins-Bold.ttf'),
+    });
 
+    useEffect(() => {
+        // This will create a new render key when the component mounts
+        setRenderKey(prev => prev + 1);
+      }, []);
+    
     return (
-     <ScreenWrapper bg="white">
+     <ScreenWrapper>
        <StatusBar style="dark"/>
         <View style={styles.container}>
            {/* Welcome Image */}
-           <Image style={styles.welcomeImage} resizeMode="cover" source={require('../assets/images/mojoGram.png')} />  
-           {/* <Image style={styles.imageSocialContainer} resizeMode="contain" source={require('../assets/images/imageSocial.png')} />   */}
-
-          
-
+           <Image  key={renderKey}  style={styles.welcomeImage}  source={require('@/assets/images/mojoGram.png')} />  
+      
           <View style={styles.buttonContainer}>
             <CustomButton 
               title="Getting Started" 
@@ -37,17 +42,17 @@ const index = () => {
               fontSize={20}
             />
 
-            <View style={styles.loginTextContainer}>
+            {/* <View style={styles.loginTextContainer}>
               <Text style={styles.alreadyAccountText}>Already have an account? </Text>
               <TouchableOpacity onPress={() => router.push('/SignIn')}>
                 <Text style={styles.signinText}>SignIn</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
         </View>
      </ScreenWrapper>
-    )
-}
+    );
+};
 
 export default index
 

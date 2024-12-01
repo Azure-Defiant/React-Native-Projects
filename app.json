@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "supa-social-app",
-    "slug": "supa-social-app",
+    "name": "MojoGram",
+    "slug": "MojoGram",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "icon": "./assets/images/app-adaptive-icon.png",
+    "scheme": "MojoGram",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/app-splash.png",
         "backgroundColor": "#ffffff"
       }
     },
@@ -27,7 +27,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/app-splash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"

@@ -19,6 +19,7 @@ export const theme = {
         semibold: '600',
         bold: '700',
         extraBold: '800',
+        regular : 'Poppins-Regular'
     },
     radius:{
         xs: '10',
