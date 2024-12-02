@@ -10,7 +10,7 @@ import CustomButton from "@/components/Button";
 
 const index = () => {
 
-    const [renderKey, setRenderKey] = React.useState(0);
+
 
      const router = useRouter()
 
@@ -19,17 +19,13 @@ const index = () => {
         'Poppins-Bold': require('@/assets/fonts/Poppins-Bold.ttf'),
     });
 
-    useEffect(() => {
-        // This will create a new render key when the component mounts
-        setRenderKey(prev => prev + 1);
-      }, []);
-    
+   
     return (
      <ScreenWrapper>
        <StatusBar style="dark"/>
         <View style={styles.container}>
            {/* Welcome Image */}
-           <Image  key={renderKey}  style={styles.welcomeImage}  source={require('@/assets/images/mojoGram.png')} />  
+           <Image style={styles.welcomeImage}  source={require('@/assets/images/mojoGram.png')} />  
       
           <View style={styles.buttonContainer}>
             <CustomButton 
@@ -42,12 +38,6 @@ const index = () => {
               fontSize={20}
             />
 
-            {/* <View style={styles.loginTextContainer}>
-              <Text style={styles.alreadyAccountText}>Already have an account? </Text>
-              <TouchableOpacity onPress={() => router.push('/SignIn')}>
-                <Text style={styles.signinText}>SignIn</Text>
-              </TouchableOpacity>
-            </View> */}
           </View>
         </View>
      </ScreenWrapper>

@@ -6,7 +6,7 @@ import CustomButton from '@/components/Button'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 
-const SignIn = () => {
+const SignUp = () => {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -35,14 +35,24 @@ const SignIn = () => {
               style={styles.logo} 
               source={require('@/assets/images/mojoGram.png')} 
             />
-            <Text style={styles.title}>Welcome Back!</Text>
-            <Text style={styles.subtitle}>Sign In to continue :)</Text>
+            <Text style={styles.title}>Hello User</Text>
+            <Text style={styles.subtitle}>Sign Up to continue :)</Text>
 
+            {/* Email */}
             <TextInput 
               style={styles.textField}
               placeholder='Email'
               placeholderTextColor="#888"
             />
+
+            {/* Username */}
+            <TextInput 
+              style={styles.textField}
+              placeholder='Username'
+              placeholderTextColor="#888"
+            />
+
+            {/* Password */}
             <View style={styles.passwordContainer}>
               <TextInput 
                 style={styles.textFieldPassword}
@@ -80,16 +90,11 @@ const SignIn = () => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.forgotPasswordContainer}>
-              <Text style={styles.forgotPassword}>
-                Forgot Password?
-              </Text>
-            </TouchableOpacity>
-
+             {/* Sign Up Button */}
             <View style={styles.buttonContainer}>
               <CustomButton 
-                title="Sign In" 
-                onPress={() => {/* Handle Sign In */}}
+                title="Sign Up" 
+                onPress={() => {/* Handle Sign Up */}}
                 backgroundColor="#3A3B3C"
                 width={wp(70)}
                 height={hp(6)}
@@ -98,16 +103,7 @@ const SignIn = () => {
               />
             </View>
 
-            <View style={styles.signUpContainer}>
-              <Text style={styles.accountText}>
-                Don't have an account? 
-              </Text>
-              <TouchableOpacity onPress={() => router.push('/SignUp')}>
-                <Text style={styles.signUpText}>
-                  Sign Up
-                </Text>
-              </TouchableOpacity>
-            </View>
+           
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -115,7 +111,7 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default SignUp
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -192,7 +188,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: hp(2),
+    marginTop: hp(7),
   },
   signUpContainer: {
     flexDirection: 'row',
