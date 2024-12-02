@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Platform, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Platform, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import { hp, wp } from '@/helpers/common'
@@ -10,6 +10,16 @@ const SignIn = () => {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  
+  // State for inputs
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  
+  // State for errors
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
@@ -18,6 +28,49 @@ const SignIn = () => {
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword)
   }
+
+  const validateInputs = () => {
+    let isValid = true;
+
+    // Email validation
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      isValid = false;
+    } else {
+      setEmailError('');
+    }
+
+    // Password validation
+    if (!password.trim()) {
+      setPasswordError('Password is required');
+      isValid = false;
+    } else if (password.length < 8) {
+      setPasswordError('Password must be at least 8 characters');
+      isValid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    // Confirm Password validation
+    if (!confirmPassword.trim()) {
+      setConfirmPasswordError('Confirm Password is required');
+      isValid = false;
+    } else if (password !== confirmPassword) {
+      setConfirmPasswordError('Passwords do not match');
+      isValid = false;
+    } else {
+      setConfirmPasswordError('');
+    }
+
+    return isValid;
+  };
+
+  const handleSignIn = () => {
+    if (validateInputs()) {
+      // Proceed with sign in logic
+      Alert.alert('Success', 'Sign in validation passed');
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -38,46 +91,78 @@ const SignIn = () => {
             <Text style={styles.title}>Welcome Back!</Text>
             <Text style={styles.subtitle}>Sign In to continue :)</Text>
 
-            <TextInput 
-              style={styles.textField}
-              placeholder='Email'
-              placeholderTextColor="#888"
-            />
-            <View style={styles.passwordContainer}>
+            <View>
               <TextInput 
-                style={styles.textFieldPassword}
-                placeholder='Password'
+                style={[
+                  styles.textField, 
+                  emailError ? styles.errorInput : {}
+                ]}
+                placeholder='Email'
                 placeholderTextColor="#888"
-                secureTextEntry={!showPassword}
+                value={email}
+                onChangeText={setEmail}
               />
-              <TouchableOpacity 
-                style={styles.eyeIcon} 
-                onPress={togglePasswordVisibility}
-              >
-                <Ionicons 
-                  name={showPassword ? "eye-off" : "eye"} 
-                  size={20} 
-                  color="#888" 
-                />
-              </TouchableOpacity>
+              {emailError ? (
+                <Text style={styles.errorText}>{emailError}</Text>
+              ) : null}
             </View>
-            <View style={styles.passwordContainer}>
-              <TextInput 
-                style={styles.textFieldPassword}
-                placeholder='Confirm Password'
-                placeholderTextColor="#888"
-                secureTextEntry={!showConfirmPassword}
-              />
-              <TouchableOpacity 
-                style={styles.eyeIcon} 
-                onPress={toggleConfirmPasswordVisibility}
-              >
-                <Ionicons 
-                  name={showConfirmPassword ? "eye-off" : "eye"} 
-                  size={20} 
-                  color="#888" 
+            
+            <View>
+              <View style={styles.passwordContainer}>
+                <TextInput 
+                  style={[
+                    styles.textFieldPassword, 
+                    passwordError ? styles.errorInput : {}
+                  ]}
+                  placeholder='Password'
+                  placeholderTextColor="#888"
+                  secureTextEntry={!showPassword}
+                  value={password}
+                  onChangeText={setPassword}
                 />
-              </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.eyeIcon} 
+                  onPress={togglePasswordVisibility}
+                >
+                  <Ionicons 
+                    name={showPassword ? "eye-off" : "eye"} 
+                    size={20} 
+                    color="#888" 
+                  />
+                </TouchableOpacity>
+              </View>
+              {passwordError ? (
+                <Text style={styles.errorText}>{passwordError}</Text>
+              ) : null}
+            </View>
+
+            <View>
+              <View style={styles.passwordContainer}>
+                <TextInput 
+                  style={[
+                    styles.textFieldPassword, 
+                    confirmPasswordError ? styles.errorInput : {}
+                  ]}
+                  placeholder='Confirm Password'
+                  placeholderTextColor="#888"
+                  secureTextEntry={!showConfirmPassword}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                />
+                <TouchableOpacity 
+                  style={styles.eyeIcon} 
+                  onPress={toggleConfirmPasswordVisibility}
+                >
+                  <Ionicons 
+                    name={showConfirmPassword ? "eye-off" : "eye"} 
+                    size={20} 
+                    color="#888" 
+                  />
+                </TouchableOpacity>
+              </View>
+              {confirmPasswordError ? (
+                <Text style={styles.errorText}>{confirmPasswordError}</Text>
+              ) : null}
             </View>
 
             <TouchableOpacity style={styles.forgotPasswordContainer}>
@@ -89,7 +174,7 @@ const SignIn = () => {
             <View style={styles.buttonContainer}>
               <CustomButton 
                 title="Sign In" 
-                onPress={() => {/* Handle Sign In */}}
+                onPress={handleSignIn}
                 backgroundColor="#3A3B3C"
                 width={wp(70)}
                 height={hp(6)}
@@ -117,7 +202,19 @@ const SignIn = () => {
 
 export default SignIn
 
+
+
 const styles = StyleSheet.create({
+  errorInput: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
+    marginLeft: 10,
+  },
   scrollContainer: {
     flexGrow: 1,
   },
