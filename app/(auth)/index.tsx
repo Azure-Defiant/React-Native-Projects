@@ -30,7 +30,7 @@ const index = () => {
           <View style={styles.buttonContainer}>
             <CustomButton 
               title="Getting Started" 
-              onPress={() => router.push('/SignIn')}
+              onPress={() => router.replace('/SignIn')}
               backgroundColor= "#3A3B3C"
               width={300}
               height={60}

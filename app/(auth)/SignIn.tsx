@@ -65,10 +65,15 @@ const SignIn = () => {
     return isValid;
   };
 
+
   const handleSignIn = () => {
-    if (validateInputs()) {
-      // Proceed with sign in logic
-      Alert.alert('Success', 'Sign in validation passed');
+    try {
+      if (validateInputs()) {
+        // Perform sign-up logic
+        router.replace('/testPage');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Sign up failed');
     }
   };
 

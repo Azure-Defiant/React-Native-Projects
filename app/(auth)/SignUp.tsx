@@ -76,11 +76,13 @@ const SignUp = () => {
   };
 
   const handleSignUp = () => {
-
-    
-    if (validateInputs()) {
-      // Proceed with sign up logic
-      Alert.alert('Success', 'Sign up validation passed');
+    try {
+      if (validateInputs()) {
+        // Perform sign-up logic
+        router.replace('/testPage');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Sign up failed');
     }
   };
 
