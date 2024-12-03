@@ -5,6 +5,9 @@ import { hp, wp } from '@/helpers/common'
 import CustomButton from '@/components/Button'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import * as SecureStore from 'expo-secure-store';
+import { supabase } from '@/lib/supabase'
+import { StatusBar } from "expo-status-bar"
 
 const SignIn = () => {
   const router = useRouter()
@@ -21,14 +24,17 @@ const SignIn = () => {
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
 
+  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
 
+  // Toggle confirm password visibility
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword)
   }
 
+  // Input validation function
   const validateInputs = () => {
     let isValid = true;
 
@@ -51,9 +57,9 @@ const SignIn = () => {
       setPasswordError('');
     }
 
-    // Confirm Password validation
+    // Confirm password validation
     if (!confirmPassword.trim()) {
-      setConfirmPasswordError('Confirm Password is required');
+      setConfirmPasswordError('Confirm password is required');
       isValid = false;
     } else if (password !== confirmPassword) {
       setConfirmPasswordError('Passwords do not match');
@@ -63,22 +69,41 @@ const SignIn = () => {
     }
 
     return isValid;
-  };
+  }
 
+  // Sign in function
+  const signIn = async () => {
+    if (!validateInputs()) {
+      return;  // Stop if validation fails
+    }
 
-  const handleSignIn = () => {
     try {
-      if (validateInputs()) {
-        // Perform sign-up logic
-        router.replace('/testPage');
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (authError) {
+        throw authError;
+      }
+
+      // Save session token if needed
+      if (authData.session) {
+        await SecureStore.setItemAsync('token', authData.session.access_token);
+        router.replace('/testPage');  // Navigate to home on success
       }
     } catch (error) {
-      Alert.alert('Error', 'Sign up failed');
+      if (error instanceof Error) {
+        Alert.alert(error.message);  // Show the error message in an alert
+      } else {
+        Alert.alert('An unknown error occurred');
+      }
     }
   };
 
   return (
     <ScreenWrapper>
+      <StatusBar style="dark"/>
       <ScrollView 
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
@@ -179,7 +204,7 @@ const SignIn = () => {
             <View style={styles.buttonContainer}>
               <CustomButton 
                 title="Sign In" 
-                onPress={handleSignIn}
+                onPress={signIn}  // Trigger the signIn function on button press
                 backgroundColor="#3A3B3C"
                 width={wp(70)}
                 height={hp(6)}
@@ -206,7 +231,6 @@ const SignIn = () => {
 }
 
 export default SignIn
-
 
 
 const styles = StyleSheet.create({

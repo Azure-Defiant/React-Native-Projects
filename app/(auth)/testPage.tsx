@@ -10,7 +10,7 @@ const testPage = () => {
     </View>
     </ScreenWrapper>
   )
-}
+} 
 
 export default testPage
 

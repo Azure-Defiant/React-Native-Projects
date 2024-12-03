@@ -5,8 +5,12 @@ import { hp, wp } from '@/helpers/common'
 import CustomButton from '@/components/Button'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import { StatusBar } from "expo-status-bar"
+import { supabase } from '@/lib/supabase'
+import * as SecureStore from 'expo-secure-store';
 
-const SignUp = () => {
+
+const SignUp =  () => {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -22,7 +26,10 @@ const SignUp = () => {
   const [usernameError, setUsernameError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
-
+  const [loading, setLoading] = useState(false);
+  // const [isSignUp, setIsSignUp] = useState(true); 
+   
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
@@ -31,63 +38,135 @@ const SignUp = () => {
     setShowConfirmPassword(!showConfirmPassword)
   }
 
-  const validateInputs = () => {
-    let isValid = true;
+// Validation function
+const validateInputs = () => {
+  let isValid = true;
 
-    // Email validation
-    if (!email.trim()) {
-      setEmailError('Email is required');
-      isValid = false;
-    } else {
-      setEmailError('');
+  // Email validation
+  if (!email.trim()) {
+    setEmailError('Email is required');
+    isValid = false;
+  } else {
+    setEmailError('');
+  }
+
+  // Username validation
+  if (!username.trim()) {
+    setUsernameError('Username is required');
+    isValid = false;
+  } else {
+    setUsernameError('');
+  }
+
+  // Password validation
+  if (!password.trim()) {
+    setPasswordError('Password is required');
+    isValid = false;
+  } else if (password.length < 8) {
+    setPasswordError('Password must be at least 8 characters');
+    isValid = false;
+  } else {
+    setPasswordError('');
+  }
+
+  // Confirm Password validation
+  if (!confirmPassword.trim()) {
+    setConfirmPasswordError('Confirm Password is required');
+    isValid = false;
+  } else if (password !== confirmPassword) {
+    setConfirmPasswordError('Passwords do not match');
+    isValid = false;
+  } else {
+    setConfirmPasswordError('');
+  }
+
+  return isValid;
+};
+
+// Sign up function and logic
+async function signUpWithEmail() {
+  if (!validateInputs()) {
+    return; // If inputs are invalid, don't proceed with the signup
+  }
+
+  setLoading(true);
+
+  try {
+    // First, check if username is unique
+    const { data: existingUser, error: usernameCheckError } = await supabase
+      .from('username')
+      .select('*')
+      .eq('username', username)
+      .single();
+
+    if (usernameCheckError && usernameCheckError.code !== 'PGRST116') {
+      throw usernameCheckError;
     }
 
-    // Username validation
-    if (!username.trim()) {
-      setUsernameError('Username is required');
-      isValid = false;
-    } else {
-      setUsernameError('');
+    if (existingUser) {
+      Alert.alert('Username already exists');
+      setLoading(false);
+      return;
     }
 
-    // Password validation
-    if (!password.trim()) {
-      setPasswordError('Password is required');
-      isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError('Password must be at least 8 characters');
-      isValid = false;
-    } else {
-      setPasswordError('');
-    }
+    // Sign up with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          username: username, // Store username in user metadata
+        },
+      },
+    });
 
-    // Confirm Password validation
-    if (!confirmPassword.trim()) {
-      setConfirmPasswordError('Confirm Password is required');
-      isValid = false;
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordError('Passwords do not match');
-      isValid = false;
-    } else {
-      setConfirmPasswordError('');
-    }
+    if (authError) throw authError;
 
-    return isValid;
-  };
+    // If signup is successful, insert username into your username table
+    if (authData.user) {
+      const { error: usernameError } = await supabase
+        .from('username')
+        .insert({
+          user_id: authData.user.id,
+          username: username,
+        });
 
-  const handleSignUp = () => {
-    try {
-      if (validateInputs()) {
-        // Perform sign-up logic
+      if (usernameError) throw usernameError;
+
+      // Save session token if available
+      if (authData.session) {
+        await SecureStore.setItemAsync('token', authData.session.access_token);
+
+        // Navigate to the test page after successful signup
         router.replace('/testPage');
       }
-    } catch (error) {
-      Alert.alert('Error', 'Sign up failed');
+
+      // Optional: Handle verification email if no session is available
+      if (!authData.session) {
+        Alert.alert('Please check your inbox for email verification!');
+      }
     }
-  };
+
+    // Reset form and handle success
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setUsername('');
+  } catch (error) {
+    if (error instanceof Error) {
+      Alert.alert(error.message); 
+    } else {
+      Alert.alert('An unknown error occurred');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <ScreenWrapper>
+        <StatusBar style="dark"/>
       <ScrollView 
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
@@ -103,7 +182,7 @@ const SignUp = () => {
               source={require('@/assets/images/mojoGram.png')} 
             />
             <Text style={styles.title}>Hello User</Text>
-            <Text style={styles.subtitle}>Sign Up to continue :)</Text>
+            <Text style={styles.subtitle}>Create your account to SignIn :)</Text>
 
             {/* Email */}
             <View>
@@ -203,7 +282,7 @@ const SignUp = () => {
             <View style={styles.buttonContainer}>
               <CustomButton 
                 title="Sign Up" 
-                onPress={handleSignUp}
+                onPress={signUpWithEmail}
                 backgroundColor="#3A3B3C"
                 width={wp(70)}
                 height={hp(6)}
