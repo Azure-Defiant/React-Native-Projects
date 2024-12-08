@@ -4,13 +4,15 @@ import { hp } from '@/helpers/common'
 import { wp } from '@/helpers/common'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import { StatusBar } from 'expo-status-bar'
+
+
+
 const Profile = () => {
   return (
     <ScreenWrapper>
       <StatusBar style="dark"/>
-
     <View>
-      <Text>Profile</Text>
+      <Text>Profile page</Text>
     </View>
     </ScreenWrapper>
   )

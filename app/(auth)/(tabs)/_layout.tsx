@@ -51,7 +51,9 @@ export default function TabLayout() {
         options={{
           title: 'Create',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle" color={color} size={size} />
+            <Image source={require('@/assets/icons/add_icon.png')} 
+            style={{ height: 25, width: 25 }}
+            />
           )
         }} 
       />
@@ -60,7 +62,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => (
-            <Image source={require('@/assets/icons/homeicon.png')} 
+            <Image source={require('@/assets/icons/profileIcon.png')} 
             style={{ height: 25, width: 25 }}
             />
           )
