@@ -6,7 +6,7 @@ const testPage = () => {
   return (
     <ScreenWrapper>
     <View>
-      <Text>this is the test page</Text>
+      <Text>this is the Home Page</Text>
     </View>
     </ScreenWrapper>
   )

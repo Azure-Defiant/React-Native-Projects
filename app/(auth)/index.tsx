@@ -11,7 +11,7 @@ import CustomButton from "@/components/Button";
 const index = () => {
 
 
-
+// user router in sign up function
      const router = useRouter()
 
     const [loaded] = useFonts({
@@ -43,7 +43,7 @@ const index = () => {
      </ScreenWrapper>
     );
 };
-
+// styling of the screens ing sign up page
 export default index
 
 const styles = StyleSheet.create({
