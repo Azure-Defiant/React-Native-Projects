@@ -90,7 +90,7 @@ const SignIn = () => {
       // Save session token if needed
       if (authData.session) {
         await SecureStore.setItemAsync('token', authData.session.access_token);
-        router.replace('/testPage');  // Navigate to home on success
+        router.replace('/(auth)/(tabs)/homepage');  // Navigate to home on success
       }
     } catch (error) {
       if (error instanceof Error) {

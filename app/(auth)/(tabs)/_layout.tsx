@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'react-native';
 
 export default function TabLayout() {
   return (
@@ -27,7 +28,9 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
+            <Image source={require('@/assets/icons/homeicon.png')} 
+            style={{ height: 25, width: 25 }}
+            />
           )
         }} 
       />
@@ -36,7 +39,10 @@ export default function TabLayout() {
         options={{
           title: 'Search',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search" color={color} size={size} />
+            <Image source={require('@/assets/icons/search.png')} 
+            style={{ width: 20, height: 20 }} 
+            
+            />
           )
         }} 
       />
@@ -54,7 +60,9 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
+            <Image source={require('@/assets/icons/homeicon.png')} 
+            style={{ height: 25, width: 25 }}
+            />
           )
         }} 
       />
