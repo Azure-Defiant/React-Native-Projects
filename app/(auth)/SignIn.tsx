@@ -338,3 +338,8 @@ const styles = StyleSheet.create({
     marginLeft: wp(2),
   },
 });
+
+
+// this is a comment
+
+
