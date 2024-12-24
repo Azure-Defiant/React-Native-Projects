@@ -12,7 +12,7 @@ const Profile = () => {
     <ScreenWrapper>
       <StatusBar style="dark"/>
     <View>
-      <Text>Profile page</Text>
+      <Text>Profile page </Text>
     </View>
     </ScreenWrapper>
   )
