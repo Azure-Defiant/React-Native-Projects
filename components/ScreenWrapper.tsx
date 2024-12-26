@@ -2,7 +2,8 @@ import React, { ReactNode } from 'react'
 import { View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-// Define an interface for the component props
+
+
 interface ScreenWrapperProps {
   children: ReactNode;
   bg?: string;

@@ -19,4 +19,6 @@ const search = () => {
 
 export default search
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  
+})

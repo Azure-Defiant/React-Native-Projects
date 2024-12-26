@@ -8,6 +8,8 @@ import { Ionicons } from '@expo/vector-icons'
 import * as SecureStore from 'expo-secure-store';
 import { supabase } from '@/lib/supabase'
 import { StatusBar } from "expo-status-bar"
+import LoadingOverlay from '@/components/Loading'
+import { Loader2 } from "lucide-react";
 
 const SignIn = () => {
   const router = useRouter()
@@ -23,6 +25,9 @@ const SignIn = () => {
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
+  // loading st
+  const [isLoading, setIsLoading] = useState(false);
+
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
@@ -70,34 +75,38 @@ const SignIn = () => {
 
     return isValid;
   }
+  
 
-  // Sign in function
   const signIn = async () => {
     if (!validateInputs()) {
       return;  // Stop if validation fails
     }
-
+  
+    setIsLoading(true); // Start loading
     try {
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       });
-
+  
       if (authError) {
         throw authError;
       }
-
+  
       // Save session token if needed
       if (authData.session) {
         await SecureStore.setItemAsync('token', authData.session.access_token);
         router.replace('/(auth)/(tabs)/homepage');  // Navigate to home on success
       }
     } catch (error) {
+      console.error('Error signing in:', error);
       if (error instanceof Error) {
         Alert.alert(error.message);  // Show the error message in an alert
       } else {
         Alert.alert('An unknown error occurred');
       }
+    } finally {
+      setIsLoading(false); // Stop loading whether sign in succeeded or failed
     }
   };
 
@@ -200,16 +209,17 @@ const SignIn = () => {
                 Forgot Password?
               </Text>
             </TouchableOpacity>
-
             <View style={styles.buttonContainer}>
-              <CustomButton 
+            <CustomButton 
                 title="Sign In" 
-                onPress={signIn}  // Trigger the signIn function on button press
+                onPress={signIn}
                 backgroundColor="#3A3B3C"
                 width={wp(70)}
                 height={hp(6)}
                 fontFamily="Poppins-Bold"
                 fontSize={18}
+                isLoading={isLoading}
+                loadingColor="#FFFFFF"
               />
             </View>
 

@@ -27,6 +27,7 @@ const SignUp =  () => {
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
   const [loading, setLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
   // const [isSignUp, setIsSignUp] = useState(true); 
    
   
@@ -86,43 +87,39 @@ const validateInputs = () => {
 // Sign up function and logic
 async function signUpWithEmail() {
   if (!validateInputs()) {
-    return; // If inputs are invalid, don't proceed with the signup
+    return;
   }
-
-  setLoading(true);
-
+ 
+  setIsLoading(true); 
+ 
   try {
-    // First, check if username is unique
     const { data: existingUser, error: usernameCheckError } = await supabase
       .from('username')
       .select('*')
       .eq('username', username)
       .single();
-
+ 
     if (usernameCheckError && usernameCheckError.code !== 'PGRST116') {
       throw usernameCheckError;
     }
-
+ 
     if (existingUser) {
       Alert.alert('Username already exists');
-      setLoading(false);
       return;
     }
-
-    // Sign up with Supabase Auth
+ 
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: email,
       password: password,
       options: {
         data: {
-          username: username, // Store username in user metadata
+          username: username,
         },
       },
     });
-
+ 
     if (authError) throw authError;
-
-    // If signup is successful, insert username into your username table
+ 
     if (authData.user) {
       const { error: usernameError } = await supabase
         .from('username')
@@ -130,39 +127,33 @@ async function signUpWithEmail() {
           user_id: authData.user.id,
           username: username,
         });
-
+ 
       if (usernameError) throw usernameError;
-
-      // Save session token if available
+ 
       if (authData.session) {
         await SecureStore.setItemAsync('token', authData.session.access_token);
-
-        // Navigate to the test page after successful signup
-        router.replace('/testPage');
+        router.replace('/(auth)/(tabs)/homepage');
       }
-
-      // Optional: Handle verification email if no session is available
+ 
       if (!authData.session) {
         Alert.alert('Please check your inbox for email verification!');
       }
     }
-
-    // Reset form and handle success
+ 
     setEmail('');
     setPassword('');
     setConfirmPassword('');
     setUsername('');
   } catch (error) {
     if (error instanceof Error) {
-      Alert.alert(error.message); 
+      Alert.alert(error.message);
     } else {
       Alert.alert('An unknown error occurred');
     }
   } finally {
-    setLoading(false);
+    setIsLoading(false); // Stop loading
   }
-};
-
+ }
 
   return (
     <ScreenWrapper>
@@ -288,6 +279,7 @@ async function signUpWithEmail() {
                 height={hp(6)}
                 fontFamily="Poppins-Bold"
                 fontSize={18}
+                isLoading={isLoading}
               />
             </View>
           </View>

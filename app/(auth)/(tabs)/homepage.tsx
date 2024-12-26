@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View, Image} from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, TouchableHighlight, Touchable } from 'react-native'
 import React from 'react'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import { StatusBar } from 'expo-status-bar'
-import { hp } from '@/helpers/common'
-import { wp } from '@/helpers/common'
+import { hp, wp } from '@/helpers/common'
 
 
 
@@ -12,25 +11,19 @@ const HomePage = () => {
     <ScreenWrapper>
         <StatusBar style='dark'/>
     <View>
-      <Text style={styles.container}>
-
-        This is the home page
-        
-      </Text>
-
-      
+    <Text>this is homepage</Text>
     </View>
 
     </ScreenWrapper>
   )
-}
+};
 
 export default HomePage
 
 const styles = StyleSheet.create({
   container:{
    height: hp(2),
-   width: wp(9)
+   
   },
   post:{
     height: hp(2),
@@ -45,5 +38,5 @@ const styles = StyleSheet.create({
 
   },
 
-})
+});
   
