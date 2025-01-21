@@ -3,17 +3,22 @@ import React from 'react'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import { StatusBar } from 'expo-status-bar'
 import { hp, wp } from '@/helpers/common'
+import { theme } from '@/constants'
+
 
 
 
 const HomePage = () => {
   return (
     <ScreenWrapper>
-        <StatusBar style='dark'/>
-    <View>
-    <Text>this is homepage</Text>
-    </View>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>MojoGram</Text>
 
+        </View>
+
+      </View>
     </ScreenWrapper>
   )
 };
@@ -22,20 +27,21 @@ export default HomePage
 
 const styles = StyleSheet.create({
   container:{
-   height: hp(2),
+   flex : 1,
+
    
   },
-  post:{
-    height: hp(2),
-    width: wp(9),
-    borderRadius: 10,
-    backgroundColor: 'white',
-    position: 'relative',
-  },
   header:{
-    marginTop: hp(2),
     flexDirection: 'row',
-
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    marginHorizontal: wp(4),
+  },
+  title:{
+    color: theme.colors.dark, 
+    fontSize: hp(3.2),
+    fontWeight: "bold",
   },
 
 });
