@@ -11,6 +11,7 @@ import { theme } from '@/constants'
 const HomePage = () => {
   return (
     <ScreenWrapper>
+      <StatusBar style="dark"/>
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
