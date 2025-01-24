@@ -8,9 +8,8 @@ import { Ionicons } from '@expo/vector-icons'
 import * as SecureStore from 'expo-secure-store';
 import { supabase } from '@/lib/supabase'
 import { StatusBar } from "expo-status-bar"
-import LoadingOverlay from '@/components/Loading'
-import { Loader2 } from "lucide-react";
 
+// sign in functions
 const SignIn = () => {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
@@ -29,21 +28,17 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
 
-  // Toggle confirm password visibility
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword)
   }
 
-  // Input validation function
   const validateInputs = () => {
     let isValid = true;
 
-    // Email validation
     if (!email.trim()) {
       setEmailError('Email is required');
       isValid = false;
@@ -51,7 +46,6 @@ const SignIn = () => {
       setEmailError('');
     }
 
-    // Password validation
     if (!password.trim()) {
       setPasswordError('Password is required');
       isValid = false;
@@ -79,10 +73,10 @@ const SignIn = () => {
 
   const signIn = async () => {
     if (!validateInputs()) {
-      return;  // Stop if validation fails
+      return;  
     }
   
-    setIsLoading(true); // Start loading
+    setIsLoading(true); 
     try {
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email: email,
@@ -93,20 +87,20 @@ const SignIn = () => {
         throw authError;
       }
   
-      // Save session token if needed
+     
       if (authData.session) {
         await SecureStore.setItemAsync('token', authData.session.access_token);
-        router.replace('/(auth)/(tabs)/homepage');  // Navigate to home on success
+        router.replace('/(auth)/(tabs)/homepage'); 
       }
     } catch (error) {
       console.error('Error signing in:', error);
       if (error instanceof Error) {
-        Alert.alert(error.message);  // Show the error message in an alert
+        Alert.alert(error.message);  
       } else {
         Alert.alert('An unknown error occurred');
       }
     } finally {
-      setIsLoading(false); // Stop loading whether sign in succeeded or failed
+      setIsLoading(false);
     }
   };
 

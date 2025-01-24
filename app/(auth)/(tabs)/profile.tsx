@@ -28,9 +28,9 @@ export default Profile
 
 const styles = StyleSheet.create({
   container:{
-    flex: 1, // Fill the available space
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center', 
   },
   post:{
     height: hp(2),
