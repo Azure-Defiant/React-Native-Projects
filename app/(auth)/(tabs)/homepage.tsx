@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View, Image, Dimensions, TouchableHighlight, Touchable } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, TouchableHighlight, Touchable, Pressable } from 'react-native'
 import React from 'react'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import { StatusBar } from 'expo-status-bar'
 import { hp, wp } from '@/helpers/common'
 import { theme } from '@/constants'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
 
 
 
@@ -16,9 +19,12 @@ const HomePage = () => {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>MojoGram</Text>
-
+          <View style={styles.icon}>
+            <Pressable>
+              <Icon name= "heart" size={30} color={theme.colors.text} />
+            </Pressable>
+          </View>
         </View>
-
       </View>
     </ScreenWrapper>
   )
@@ -44,6 +50,11 @@ const styles = StyleSheet.create({
     fontSize: hp(3.2),
     fontWeight: "bold",
   },
+  icon:{
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+  }
 
 });
   
